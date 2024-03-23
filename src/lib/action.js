@@ -53,10 +53,14 @@ export const addUser = async (prevState,formData) => {
 
   try {
     connectToDb();
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const newUser = new User({
       username,
       email,
-      password,
+      password: hashedPassword,
       img,
     });
 

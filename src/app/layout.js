@@ -8,10 +8,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: {
-    default:"Next.js 14 Homepage",
-    template:"%s | Next.js 14"
+    default:"NNR TMS Homepage",
+    template:"%s | NNR TMS"
   },
-  description: "Next.js starter app description",
+  description: "NNR TMS app description",
 };
 
 export default function RootLayout({ children }) {

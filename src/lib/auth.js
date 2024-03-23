@@ -27,18 +27,9 @@ const login = async (credentials) => {
   }
 };
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
+export const { signIn, signOut, auth } = NextAuth({
   ...authConfig,
   providers: [
-    GitHub({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-    }),
     CredentialsProvider({
       async authorize(credentials) {
         try {
@@ -50,29 +41,71 @@ export const {
       },
     }),
   ],
-  callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account.provider === "github") {
-        connectToDb();
-        try {
-          const user = await User.findOne({ email: profile.email });
-
-          if (!user) {
-            const newUser = new User({
-              username: profile.login,
-              email: profile.email,
-              image: profile.avatar_url,
-            });
-
-            await newUser.save();
-          }
-        } catch (err) {
-          console.log(err);
-          return false;
-        }
-      }
-      return true;
-    },
-    ...authConfig.callbacks,
-  },
+  // ADD ADDITIONAL INFORMATION TO SESSION
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     if (user) {
+  //       token.username = user.username;
+  //       token.img = user.img;
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     if (token) {
+  //       session.user.username = token.username;
+  //       session.user.img = token.img;
+  //     }
+  //     return session;
+  //   },
+  // },
 });
+
+// export const {
+//   handlers: { GET, POST },
+//   auth,
+//   signIn,
+//   signOut,
+// } = NextAuth({
+//   ...authConfig,
+//   providers: [
+//     GitHub({
+//       clientId: process.env.GITHUB_ID,
+//       clientSecret: process.env.GITHUB_SECRET,
+//     }),
+//     CredentialsProvider({
+//       async authorize(credentials) {
+//         try {
+//           const user = await login(credentials);
+//           return user;
+//         } catch (err) {
+//           return null;
+//         }
+//       },
+//     }),
+//   ],
+//   callbacks: {
+//     async signIn({ user, account, profile }) {
+//       if (account.provider === "github") {
+//         connectToDb();
+//         try {
+//           const user = await User.findOne({ email: profile.email });
+
+//           if (!user) {
+//             const newUser = new User({
+//               username: profile.login,
+//               email: profile.email,
+//               image: profile.avatar_url,
+//             });
+
+//             await newUser.save();
+//           }
+//         } catch (err) {
+//           console.log(err);
+//           return false;
+//         }
+//       }
+//       return true;
+//     },
+//     ...authConfig.callbacks,
+//   },
+// });

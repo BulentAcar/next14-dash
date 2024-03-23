@@ -9,6 +9,8 @@ export const authConfig = {
       if (user) {
         token.id = user.id;
         token.isAdmin = user.isAdmin;
+        token.username = user.username;
+        token.img = user.img;
       }
       return token;
     },
@@ -16,6 +18,8 @@ export const authConfig = {
       if (token) {
         session.user.id = token.id;
         session.user.isAdmin = token.isAdmin;
+        session.user.username = token.username;
+        session.user.img = token.img;
       }
       return session;
     },
@@ -24,7 +28,13 @@ export const authConfig = {
       const isOnAdminPanel = request.nextUrl?.pathname.startsWith("/admin");
       const isOnBlogPage = request.nextUrl?.pathname.startsWith("/blog");
       const isOnLoginPage = request.nextUrl?.pathname.startsWith("/login");
+      const isOnDashboardPage = request.nextUrl?.pathname.startsWith("/dashboard");
 
+      // ONLY AUTHENTICATED USERS CAN REACH THE Dashboard PAGE
+
+      if (isOnDashboardPage && !user) {
+        return false;
+      }
       // ONLY ADMIN CAN REACH THE ADMIN DASHBOARD
 
       if (isOnAdminPanel && !user?.isAdmin) {
