@@ -1,4 +1,4 @@
-import { Post, User, Product } from "./models";
+import { Post, User, Product, Personeel } from "./models";
 import { connectToDb } from "./utils";
 import { unstable_noStore as noStore } from "next/cache";
 
@@ -143,3 +143,24 @@ export const cards = [
     change: 18,
   },
 ];
+
+
+// Personeel Data
+
+export const fetchPersoneel = async (q, page) => {
+  const regex = new RegExp(q, "i");
+
+  const ITEM_PER_PAGE = 5;
+
+  try {
+    connectToDb();
+    const count = await Personeel.find({ bsn: { $regex: regex } }).count();
+    const personeel = await Personeel.find({ bsn: { $regex: regex } })
+      .limit(ITEM_PER_PAGE)
+      .skip(ITEM_PER_PAGE * (page - 1));
+    return { count, personeel };
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to fetch users!");
+  }
+};

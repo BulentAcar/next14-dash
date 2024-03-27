@@ -42,11 +42,11 @@ const menuItems = [
     ],
   },
   {
-    title: "Personeel",
+    title: "Invoer Data",
     list: [
       {
-        title: "Uitvoerend personeel",
-        path: "/dashboard/revenue",
+        title: "Personeel",
+        path: "/dashboard/personeel",
         icon: <MdWork />,
       },
       {
@@ -62,11 +62,11 @@ const menuItems = [
     ],
   },
   {
-    title: "Analytics",
+    title: "Uitvoer Data",
     list: [
       {
-        title: "Revenue",
-        path: "/dashboard/revenue",
+        title: "Personeel Tabel",
+        path: "/dashboard/personeeltabel",
         icon: <MdWork />,
       },
       {

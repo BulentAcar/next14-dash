@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Post, User } from "./models";
+import { Personeel, Post, User } from "./models";
 import { connectToDb } from "./utils";
 import { signIn, signOut } from "./auth";
 import bcrypt from "bcryptjs";
@@ -148,5 +148,147 @@ export const login = async (prevState, formData) => {
       return { error: "Invalid username or password" };
     }
     throw err;
+  }
+};
+
+
+// Personeel toevoegen
+
+export const addPersoneel = async (prevState,formData) => {
+  const { bsn,
+          foto,
+          geslacht,
+          img,
+          titel,
+          voorletters,
+          voornaam,
+          tussenvoegsel,
+          achternaam,
+          geboortedatum,
+          geboorteplaats,
+          geboorteland,
+          nationaliteit,
+          burgerstaat,
+          naampartner,
+          naamnood,
+          nrnood,
+          straatnaam,
+          huisnr,
+          postcode,
+          plaatsnaam,
+          poststraat,
+          posthuisnr,
+          postpostcode,
+          postplaats,
+          telnr,
+          email,
+          mobnr,
+          altnr,
+          soortid,
+          idnr,
+          datafid,
+          datverid,
+          plaatsafid,
+          scanid,
+          soortid2,
+          idnr2,
+          datafid2,
+          datverid2,
+          plaatsafid2,
+          scanid2,
+          srtdienst,
+          chwg,
+          datindienst,
+          datuitdienst,
+          functie,
+          functietypering,
+          loonschaal,
+          uurtarief,
+          bankpersoneel,
+          naamrekhpers,
+          ibanpersoneel,
+          scanbankpas,
+          vogpersoneel,
+          lhformpersoneel,
+          verdienstbetrekking,
+          modeldbapers,
+          actiefpers, 
+        } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+
+    const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newPersoneel = new Personeel({
+      bsn,
+      foto,
+      geslacht,
+      img,
+      titel,
+      voorletters,
+      voornaam,
+      tussenvoegsel,
+      achternaam,
+      geboortedatum,
+      geboorteplaats,
+      geboorteland,
+      nationaliteit,
+      burgerstaat,
+      naampartner,
+      naamnood,
+      nrnood,
+      straatnaam,
+      huisnr,
+      postcode,
+      plaatsnaam,
+      poststraat,
+      posthuisnr,
+      postpostcode,
+      postplaats,
+      telnr,
+      email,
+      mobnr,
+      altnr,
+      soortid,
+      idnr,
+      datafid,
+      datverid,
+      plaatsafid,
+      scanid,
+      soortid2,
+      idnr2,
+      datafid2,
+      datverid2,
+      plaatsafid2,
+      scanid2,
+      srtdienst,
+      chwg,
+      datindienst,
+      datuitdienst,
+      functie,
+      functietypering,
+      loonschaal,
+      uurtarief,
+      bankpersoneel,
+      naamrekhpers,
+      ibanpersoneel,
+      scanbankpas,
+      vogpersoneel,
+      lhformpersoneel,
+      verdienstbetrekking,
+      modeldbapers,
+      actiefpers,
+
+    });
+
+    await newPersoneel.save();
+    console.log("saved to db");
+    return { success: "Saved to DB" };
+    revalidatePath("/admin");
+  } catch (err) {
+    console.log(err);
+    return { error: "Something went wrong!" };
   }
 };
